@@ -1,9 +1,9 @@
+import { Link } from "react-router-dom"
+
 const GoogleLogin = () => {
   return (
     <div>
-      <a href="/api/users/auth/google" target="_blank">
-        SIGN IN GOOGLE
-      </a>
+      <Link to="/api/users/auth/google">SIGN IN GOOGLE</Link>
     </div>
   )
 }
