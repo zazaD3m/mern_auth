@@ -11,7 +11,7 @@ import { CustomError } from "../utils/CustomError.js"
 const clientUrl =
   process.env.NODE_ENV === "production"
     ? process.env.CLIENT_URL_PROD
-    : process.env.DEV
+    : process.env.CLIENT_URL_DEV
 
 // GOOGLE AUTH START
 
