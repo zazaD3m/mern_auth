@@ -1,24 +1,56 @@
 import express from "express"
+import passport from "passport"
 import {
-  authUser,
+  loginUser,
   registerUser,
   logoutUser,
-  getUserProfile,
   updateUserProfile,
+  googleGetUser,
+  googleLoginCallback,
+  refresh,
+  me,
 } from "../controllers/userController.js"
-import { protect } from "../middleware/authMiddleware.js"
+import {
+  authenticateUser,
+  checkGoogleAuth,
+} from "../middleware/authMiddleware.js"
+import loginLimiter from "../middleware/loginLimiter.js"
 
 const router = express.Router()
 
+// /api/users
 router.post("/", registerUser)
 
-router.post("/auth", authUser)
+router.post("/auth", loginLimiter, loginUser)
 
 router.post("/logout", logoutUser)
 
-router
-  .route("/profile")
-  .get(protect, getUserProfile)
-  .put(protect, updateUserProfile)
+router.put("/", authenticateUser, updateUserProfile)
+
+router.get("/refresh", refresh)
+
+router.get("/me", authenticateUser, me)
+
+// GOOGLE AUTH
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    failureRedirect: process.env.CLIENT_URL,
+  })
+)
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: process.env.CLIENT_URL,
+  }),
+  googleLoginCallback
+)
+
+router.get("/auth/google/getuser", checkGoogleAuth, googleGetUser)
+
+// GOOGLE AUTH END
 
 export default router

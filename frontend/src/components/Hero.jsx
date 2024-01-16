@@ -1,7 +1,17 @@
 import { Button, Card, Container } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
+import { useMeMutation } from "../slices/authApiSlice"
 
 const Hero = () => {
+  const [getUserInfo, { error }] = useMeMutation()
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    getUserInfo()
+  }
+  if (error) {
+    console.log(error)
+  }
   return (
     <div className=" py-5">
       <Container className="d-flex justify-content-center">
@@ -26,6 +36,9 @@ const Hero = () => {
           </div>
         </Card>
       </Container>
+      <Button variant="secondary" onClick={handleClick}>
+        GGGet
+      </Button>
     </div>
   )
 }

@@ -1,8 +1,8 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom"
+import { useLocation, Navigate, Outlet } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { selectCurrentToken } from "../slices/authSlice"
 
-const PrivateRoute = () => {
+const RequireAuth = () => {
   const location = useLocation()
   const token = useSelector(selectCurrentToken)
 
@@ -12,4 +12,4 @@ const PrivateRoute = () => {
     <Navigate to="/login" state={{ from: location }} replace />
   )
 }
-export default PrivateRoute
+export default RequireAuth

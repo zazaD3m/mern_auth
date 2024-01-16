@@ -1,29 +1,21 @@
 import mongoose from "mongoose"
 import bcrypt from "bcryptjs"
 
-
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true
+const userSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: false },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-}, {
-  timestamps: true
-})
+  {
+    timestamps: true,
+  }
+)
 
 userSchema.pre("save", async function (next) {
-  // when User.save() happens we check if password was modified or it is a new user 
+  // when User.save() happens we check if password was modified or it is a new user
   // if User was modified but password stayed the same we just go to next middleware
-  // else we crypt password and save to db 
+  // else we crypt password and save to db
   if (!this.isModified("password")) {
     next()
   }
@@ -34,6 +26,9 @@ userSchema.pre("save", async function (next) {
 
 // checks if password that user entered is matched with password saved in db
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) {
+    return null
+  }
   return await bcrypt.compare(enteredPassword, this.password)
 }
 

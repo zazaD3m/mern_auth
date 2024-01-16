@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import Loader from "../components/Loader"
 import FormContainer from "../components/FormContainer"
 import { Button, Col, Form, Row } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
-import { useRegisterMutation } from "../slices/usersApiSlice"
-import { setCredentials } from "../slices/authSlice"
+import { useRegisterMutation } from "../slices/authApiSlice"
 
 const RegisterScreen = () => {
   const [name, setName] = useState("")
@@ -15,17 +13,14 @@ const RegisterScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
-  const { userInfo } = useSelector((state) => state.auth)
+  const [register, { isLoading, isError, error }] = useRegisterMutation()
 
   useEffect(() => {
-    if (userInfo) {
-      navigate("/")
+    if (isError) {
+      toast.error(error.data.message)
     }
-  }, [navigate, userInfo])
-
-  const [register, { isLoading }] = useRegisterMutation()
+  }, [isError, error])
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -33,8 +28,9 @@ const RegisterScreen = () => {
       toast.error("Passwords do not match")
     } else {
       try {
-        const res = await register({ name, email, password }).unwrap()
-        dispatch(setCredentials({ ...res }))
+        await register({ name, email, password }).unwrap()
+
+        toast.success(`Welcome, ${name}`)
         navigate("/")
       } catch (err) {
         toast.error(err)
