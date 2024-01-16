@@ -1,5 +1,4 @@
-import dotenv from "dotenv"
-dotenv.config()
+import "dotenv/config.js"
 import express from "express"
 import cors from "cors"
 import path from "path"
@@ -8,7 +7,8 @@ import userRoutes from "./routes/userRoutes.js"
 import morgan from "morgan"
 import globalErrorHandler from "./controllers/errorController.js"
 import { CustomError } from "./utils/CustomError.js"
-import googleAuthStrategy from "./services/googleStrategy.js"
+import { googleLoginStrategy } from "./services/googleStrategy.js"
+import passport from "passport"
 
 const app = express()
 
@@ -18,7 +18,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(morgan("dev"))
 
-googleAuthStrategy()
+passport.use(googleLoginStrategy)
+
 app.use("/api/users", userRoutes)
 
 if (process.env.NODE_ENV === "production") {

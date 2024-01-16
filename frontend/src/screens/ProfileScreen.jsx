@@ -29,18 +29,12 @@ const ProfileScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    await updateUser({ name, email }).unwrap()
 
-    // if (password !== confirmPassword) {
-    //   toast.error("Passwords do not match")
-    // } else {
-    //   try {
-    //     toast.success("user updated")
-    //     // navigate("/")
-    //   } catch (err) {
-    //     toast.error(err?.data?.message || err.error)
-    //   }
-    // }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match")
+    } else {
+      await updateUser({ name, email, password })
+    }
   }
 
   return (

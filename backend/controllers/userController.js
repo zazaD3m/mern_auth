@@ -8,6 +8,11 @@ import jwt from "jsonwebtoken"
 import { clearRefreshToken, returnUserInfo } from "../utils/helpers.js"
 import { CustomError } from "../utils/CustomError.js"
 
+const clientUrl =
+  process.env.NODE_ENV === "production"
+    ? process.env.CLIENT_URL_PROD
+    : process.env.DEV
+
 // GOOGLE AUTH START
 
 // @desc    Create or get user from DB with email
@@ -23,7 +28,7 @@ const googleLoginCallback = asyncHandler(async (req, res) => {
 
   generateGoogleToken(res, id)
 
-  return res.redirect(process.env.CLIENT_URL + "/google/getuser")
+  return res.redirect(`${clientUrl}/google/getuser`)
 })
 
 // @desc    Auth user/set token

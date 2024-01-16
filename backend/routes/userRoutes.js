@@ -36,7 +36,7 @@ router.get(
   "/auth/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
-    failureRedirect: process.env.CLIENT_URL,
+    failureRedirect: process.env.CLIENT_URL_DEV,
   })
 )
 
@@ -44,7 +44,7 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: process.env.CLIENT_URL,
+    failureRedirect: process.env.CLIENT_URL_DEV,
   }),
   googleLoginCallback
 )
