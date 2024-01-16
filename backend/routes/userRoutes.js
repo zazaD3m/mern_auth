@@ -14,14 +14,13 @@ import {
   authenticateUser,
   checkGoogleAuth,
 } from "../middleware/authMiddleware.js"
-import loginLimiter from "../middleware/loginLimiter.js"
 
 const router = express.Router()
 
 // /api/users
 router.post("/", registerUser)
 
-router.post("/auth", loginLimiter, loginUser)
+router.post("/auth", loginUser)
 
 router.post("/logout", logoutUser)
 
